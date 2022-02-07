@@ -7,6 +7,17 @@ const Navbar = () => {
     const isMobile = useBreakpointValue({ base: true, md: false });
     const menuListBgColor = useColorModeValue('black.300', 'black.900');
 
+    const menuItems = [
+        {
+            to: '/',
+            title: 'Home',
+        },
+        {
+            to: '/employee',
+            title: 'Employee',
+        },
+    ];
+
     return (
         <Box
             as="nav"
@@ -29,8 +40,9 @@ const Navbar = () => {
                 </Flex>
 
                 <HStack display={{ base: 'none', md: 'flex' }} flexGrow={1} color="black.300">
-                    <NavmenuItem to="/" title="Home" />
-                    <NavmenuItem to="employee" title="Employee" />
+                    {menuItems.map((item) => (
+                        <NavmenuItem key={`nav-item-${item.title}`} to={item.to} title={item.title} />
+                    ))}
                 </HStack>
 
                 <Flex align="right">
@@ -47,16 +59,13 @@ const Navbar = () => {
                                 <Menu>
                                     <MenuButton as={IconButton} icon={<Icon />} variant="outline" aria-label="Navigation menu" />
                                     <MenuList bgColor={menuListBgColor}>
-                                        <Link to='/'>
-                                            <MenuItem>
-                                                Home
-                                            </MenuItem>
-                                        </Link>
-                                        <Link to='/employee'>
-                                            <MenuItem>
-                                                Employee
-                                            </MenuItem>
-                                        </Link>
+                                        {menuItems.map((item) => (
+                                            <Link to={item.to} key={`nav-item-${item.title}`}>
+                                                <MenuItem>
+                                                    {item.title}
+                                                </MenuItem>
+                                            </Link>
+                                        ))}
                                         <Divider />
                                         <Box p={2}>
                                             <FormControl as={HStack} w="auto">
