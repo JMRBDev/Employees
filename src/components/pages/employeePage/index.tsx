@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from '@chakra-ui/react';
 
-const EmployeeDetail = () => {
+const EmployeePage = () => {
     return (
         <Text>
             Employee Detail
@@ -9,4 +9,4 @@ const EmployeeDetail = () => {
     );
 }
 
-export default EmployeeDetail;
+export default EmployeePage;
