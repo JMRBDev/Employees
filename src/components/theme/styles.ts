@@ -6,7 +6,7 @@ const global = () => ({
     },
 
     'html, body, #root': {
-        height: '100%',
+        maxHeight: '100vh',
         width: '100%',
     }
 });

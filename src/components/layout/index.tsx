@@ -1,5 +1,6 @@
 import React from 'react';
-import { Divider, FormControl, HStack, Icon, IconButton, Input, Text, Box, Link } from '@chakra-ui/react';
+import { Box, VStack, Container, Text, Divider } from '@chakra-ui/react';
+import Navbar from '../navigation/Navbar/index';
 
 interface ILayoutProps {
     children: React.ReactNode;
@@ -7,24 +8,18 @@ interface ILayoutProps {
 
 const Layout = ({ children }: ILayoutProps) => {
     return (
-        <Box width={{ base: "container.sm", lg: "container.md", xl: "container.xl" }} m="auto">
-            <HStack justify="space-between" py={6}>
-                <HStack spacing={8}>
-                    <Text fontWeight="bold">Logo</Text>
-                    <HStack>
-                        <Link href="/">Home</Link>
-                        <Link href="/employee">Employee</Link>
-                    </HStack>
-                </HStack>
-                <FormControl as={HStack} width="auto">
-                    <Input placeholder="Search employee" />
-                    <IconButton aria-label="Search employee" icon={<Icon />} onClick={() => { }} />
-                </FormControl>
-            </HStack>
-            <Divider position="absolute" left={0} />
-            <Box mt={6}>
-                {children}
-            </Box>
+        <Box as="main">
+            <Navbar />
+            <VStack as={Container} maxW="container.md" minH="100vh">
+                <Box pt={24} flex={1}>
+                    {children}
+                </Box>
+                <Box w="full" py={16}>
+                    <Divider mb={6} />
+                    <Text>Footer</Text>
+                </Box>
+            </VStack>
+
         </Box>
     );
 }
