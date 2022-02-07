@@ -2,6 +2,16 @@
   "name": "a3media-employees",
   "version": "0.1.0",
   "private": true,
+  "description": "Employees CRUD",
+  "author": {
+    "name": "Jose Rosendo",
+    "email": "josemrb99@gmail.com",
+    "url": "https://github.com/JMRBDev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JMRBDev/Employees"
+  },
   "dependencies": {
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11",
