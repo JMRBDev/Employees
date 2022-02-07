@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 
 const HomePage = () => {
     return (
-        <Text>
-            Home Page
-        </Text>
+        <>
+            <Heading as="h1">Employee Directory</Heading>
+            <Heading as="h2" size="lg">Jose Rosendo</Heading>
+        </>
     );
 }
 
