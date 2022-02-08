@@ -11,7 +11,7 @@ const Layout = ({ children }: ILayoutProps) => {
         <Box as="main">
             <Navbar />
             <VStack as={Container} maxW="container.md" minH="100vh">
-                <Box pt={24} flex={1}>
+                <Box pt={24} w="full" flex={1}>
                     {children}
                 </Box>
                 <Box w="full" py={16}>

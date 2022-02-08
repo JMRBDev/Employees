@@ -13,8 +13,8 @@ const Navbar = () => {
             title: 'Home',
         },
         {
-            to: '/employee',
-            title: 'Employee',
+            to: '/new',
+            title: 'New',
         },
     ];
 
@@ -27,15 +27,15 @@ const Navbar = () => {
             style={{ backdropFilter: 'blur(10px) contrast(100%)', WebkitBackdropFilter: 'blur(10px) contrast(100%)' }}
             zIndex={999}
         >
-            <Flex
+            <HStack
                 as={Container}
-                display="flex"
                 p={2}
                 maxW="container.md"
                 align="center"
                 justify="space-between"
+                gap={8}
             >
-                <Flex align="center" mr={6} color="black.300">
+                <Flex align="center" color="black.300">
                     <Text fontWeight="bold">Logo</Text>
                 </Flex>
 
@@ -46,7 +46,7 @@ const Navbar = () => {
                 </HStack>
 
                 <Flex align="right">
-                    <Flex gridGap={2} display="inline-flex" >
+                    <Flex gap={2} display="inline-flex" >
                         {!isMobile && (
                             <FormControl as={HStack} w="auto">
                                 <Input placeholder="Search employee" />
@@ -79,7 +79,7 @@ const Navbar = () => {
                         )}
                     </Flex>
                 </Flex>
-            </Flex>
+            </HStack>
         </Box>
     );
 }
