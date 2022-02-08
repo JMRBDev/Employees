@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Flex, Grid, GridItem, Skeleton, VStack } from '@chakra-ui/react';
 import EmployeeCard from '../EmployeeCard';
 import Pagination from '../../pagination/Pagination';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../../redux/store';
+import { setCurrentPage } from '../../../redux/slices/userPreferencesSlice';
 
 interface ICardsGridProps {
     pages: any[][];
@@ -10,7 +13,8 @@ interface ICardsGridProps {
 };
 
 const CardsGrid = ({ pages, pageSize, isLoaded }: ICardsGridProps) => {
-    const [currentPage, setCurrentPage] = useState<number>(0);
+    const currentPage = useSelector((state: RootState) => state.userPreferences.employeesGridCurrentPage);
+    const dispatch = useDispatch();
 
     return (
         <VStack align="stretch">
@@ -29,7 +33,7 @@ const CardsGrid = ({ pages, pageSize, isLoaded }: ICardsGridProps) => {
             </Grid>
             {isLoaded && (
                 <Flex w="full" justify="center" pt={12}>
-                    <Pagination pages={pages.length} currentPage={currentPage} setCurrentPage={(index) => setCurrentPage(index)} />
+                    <Pagination pages={pages.length} currentPage={currentPage} setCurrentPage={(index) => dispatch(setCurrentPage(index))} />
                 </Flex>
             )}
         </VStack>
