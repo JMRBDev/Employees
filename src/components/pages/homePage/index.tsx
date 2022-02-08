@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Heading, Text, useToast } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { changeStatus } from '../../../redux/slices/appSlice';
 import { getAllEmployees } from '../../../services/EmployeeService/index';
-import { IEmployee } from '../../../interfaces/IEmployee';
 import CardsGrid from '../../cards/CardsGrid/index';
+import { saveEmployees } from '../../../redux/slices/employeesSlice';
 
 const HomePage = () => {
-    const [employees, setEmployees] = useState<IEmployee[]>([]);
+    const { appStatus, pageSize, employees } = useSelector((state: RootState) => ({
+        appStatus: state.app.status,
+        pageSize: state.userPreferences.pageSize,
+        employees: state.employees.all,
+    }));
 
-    const appStatus = useSelector((state: RootState) => state.app.status);
-    const pageSize = useSelector((state: RootState) => state.userPreferences.pageSize);
     const dispatch = useDispatch();
 
     const toast = useToast();
@@ -31,7 +33,7 @@ const HomePage = () => {
             const res = await getAllEmployees();
             if (res.status === 'success') {
                 dispatch(changeStatus('ready'));
-                setEmployees(res.data);
+                dispatch(saveEmployees(res.data));
             } else {
                 dispatch(changeStatus('errorFetching'));
             }
