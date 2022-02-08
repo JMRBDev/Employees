@@ -8,9 +8,10 @@ export const getAllEmployees = async () => {
 
         return res;
     } catch (err) {
-        console.log(err);
-
-        return undefined;
+        return {
+            status: 'error',
+            message: (err as Error).message,
+        };
     }
 };
 

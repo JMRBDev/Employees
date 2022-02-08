@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Heading, Text } from '@chakra-ui/react';
+import { Heading, Text, useToast } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { changeStatus } from '../../../redux/slices/appSlice';
@@ -9,20 +9,29 @@ const HomePage = () => {
     const appStatus = useSelector((state: RootState) => state.app.status);
     const dispatch = useDispatch();
 
+    const toast = useToast();
+
     useEffect(() => {
         const _getAllEmployees = async () => {
             dispatch(changeStatus('fetching'));
             const res = await getAllEmployees();
-            console.log(res);
             if (res.status === 'success') {
                 dispatch(changeStatus('ready'));
             } else {
                 dispatch(changeStatus('errorFetching'));
             }
+
+            toast({
+                title: res.status.toUpperCase(),
+                description: res.message,
+                status: res.status,
+                duration: res.status === 'error' ? null : 5000,
+                isClosable: true,
+            });
         };
 
         _getAllEmployees();
-    }, [dispatch]);
+    }, [dispatch, toast]);
     return (
         <>
             <Heading as="h1">Employee Directory</Heading>
