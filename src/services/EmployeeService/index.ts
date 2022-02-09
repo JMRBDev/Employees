@@ -1,3 +1,4 @@
+import { IEmployee } from '../../interfaces/IEmployee';
 const API_URL = 'http://dummy.restapiexample.com/api/v1';
 
 export const getAllEmployees = async () => {
@@ -29,22 +30,19 @@ export const getSingleEmployee = async (id: number) => {
     }
 };
 
-export const createEmployee = async (name: string, salary: number, age: number) => {
+export const createEmployee = async (data: IEmployee) => {
     try {
         const res = await (await fetch(`${API_URL}/create`, {
             method: 'POST',
-            body: JSON.stringify({
-                name,
-                salary,
-                age,
-            }),
+            body: JSON.stringify(data),
         })).json();
 
         return res;
     } catch (err) {
-        console.log(err);
-
-        return undefined;
+        return {
+            status: 'error',
+            message: (err as Error).message,
+        };
     }
 };
 

@@ -13,12 +13,24 @@ const EmployeeCard = ({ employee }: IEmployeeCardProps) => {
             <VStack p={6} gap={1} bg="gray.600" borderRadius="md" overflow="hidden" boxShadow="md">
                 <Avatar name={employee?.employee_name} src={employee?.employee_image} />
                 <Divider />
-                <VStack spacing={0}>
-                    <Heading as="h3" size="md">
-                        {employee?.employee_name}
+                <VStack spacing={0} margin="auto" overflow="hidden" maxW="100%">
+                    <Heading as="h3" size="md" maxW="100%" isTruncated>
+                        {employee?.employee_name || 'Name'}
                     </Heading>
-                    <Text color="gray.400" fontSize="sm">${employee?.employee_salary} / year</Text>
-                    <Text color="gray.400" fontSize="sm">{employee?.employee_age} years old</Text>
+                    <Text color="gray.400" fontSize="sm" maxW="100%" isTruncated>
+                        $
+                        <Text as="span" fontWeight="bold">
+                            {employee?.employee_salary || 'Salary'}
+                        </Text>
+                        {' '}
+                        / year</Text>
+                    <Text color="gray.400" fontSize="sm" maxW="100%" isTruncated>
+                        <Text as="span" fontWeight="bold">
+                            {employee?.employee_age || 'Age'}
+                        </Text>
+                        {' '}
+                        years old
+                    </Text>
                 </VStack>
             </VStack>
         </Link>
