@@ -33,9 +33,10 @@ const CardsGrid = () => {
 
     const handleReload = useCallback(
         () => {
+            toast.closeAll();
             dispatch(getAllEmployees())
         },
-        [dispatch],
+        [dispatch, toast],
     );
 
     useEffect(() => {
@@ -45,7 +46,7 @@ const CardsGrid = () => {
     }, [employees.length, dispatch]);
 
     useEffect(() => {
-        if (appState.status && appState.status === 'errorFetching') {
+        if (appState.status === 'errorFetching') {
             toast({
                 render: () => (
                     <Alert
@@ -54,10 +55,20 @@ const CardsGrid = () => {
                         actionButton={{
                             icon: IoReloadCircle,
                             onClick: () => {
-                                toast.closeAll();
                                 handleReload();
                             }
                         }}
+                    />
+                ),
+                isClosable: false,
+                duration: 5000,
+            });
+        } else if (appState.status === 'ready') {
+            toast({
+                render: () => (
+                    <Alert
+                        type="success"
+                        message={appState.message}
                     />
                 ),
                 isClosable: false,

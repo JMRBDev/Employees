@@ -10,7 +10,7 @@ import { RootState } from '../../../redux/store';
 import Alert from '../../alerts/Alert';
 import { IoReloadCircle } from 'react-icons/io5';
 
-const EmployeePage = () => {
+const NewEmployeePage = () => {
     const dispatch = useDispatch();
 
     const FormSchema = Yup.object().shape({
@@ -144,4 +144,4 @@ const EmployeePage = () => {
     );
 };
 
-export default EmployeePage;
+export default NewEmployeePage;
