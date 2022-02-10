@@ -8,7 +8,7 @@ import { deleteEmployee, getEmployeeById, INewEmployee, updateEmployee } from '.
 import { RootState } from '../../../redux/store';
 import Alert from '../../alerts/Alert';
 import { IoReloadCircle, IoTrash } from 'react-icons/io5';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { setCurrentEmployee } from '../../../redux/slices/employeesSlice';
 
 const EditEmployeePage = () => {
@@ -48,8 +48,11 @@ const EditEmployeePage = () => {
         dispatch(updateEmployee({ id: Number(id), ...watch() }))
     };
 
+    const navigate = useNavigate();
+
     const handleDelete = () => {
         dispatch(deleteEmployee(Number(id)));
+        navigate('/')
     };
 
     useEffect(() => {
