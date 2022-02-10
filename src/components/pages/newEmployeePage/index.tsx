@@ -4,10 +4,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import EmployeeCard from '../../cards/EmployeeCard';
-import { createEmployee as createEmployeeThunk, INewEmployee } from '../../../redux/thunks/employeesThunks';
-import { RootState } from '../../../redux/store';
-import Alert from '../../alerts/Alert';
+import EmployeeCard from 'src/components/cards/EmployeeCard';
+import { createEmployee as createEmployeeThunk, INewEmployee } from 'src/redux/thunks/employeesThunks';
+import { RootState } from 'src/redux/store';
+import Alert from 'src/components/alerts/Alert';
 import { IoReloadCircle } from 'react-icons/io5';
 
 const NewEmployeePage = () => {

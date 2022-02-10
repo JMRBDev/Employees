@@ -1,6 +1,6 @@
 import React from 'react';
 import { HStack, Icon } from '@chakra-ui/react';
-import PaginationButton from '../PaginationButton';
+import PaginationButton from 'src/components/pagination/PaginationButton';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 interface IPaginationProps {

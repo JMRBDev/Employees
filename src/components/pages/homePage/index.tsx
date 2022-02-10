@@ -1,5 +1,5 @@
 import React from 'react';
-import CardsGrid from '../../cards/CardsGrid/index';
+import CardsGrid from 'src/components/cards/CardsGrid';
 
 const HomePage = () => {
     return (

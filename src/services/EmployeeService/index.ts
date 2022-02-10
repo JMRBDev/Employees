@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { API_URL } from '../../constants';
-import { INewEmployee } from '../../redux/thunks/employeesThunks';
+import { API_URL } from 'src/constants';
+import { INewEmployee } from 'src/redux/thunks/employeesThunks';
 
 export const getAllEmployees = async () => {
     try {

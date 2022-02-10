@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, Divider, Heading, Text, VStack } from '@chakra-ui/react';
 import { NavLink as Link } from 'react-router-dom';
-import { IEmployee } from '../../../interfaces/IEmployee';
+import { IEmployee } from 'src/interfaces/IEmployee';
 
 interface IEmployeeCardProps {
     employee?: IEmployee;

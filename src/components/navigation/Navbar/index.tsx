@@ -1,7 +1,7 @@
 import React from 'react';
 import { HStack, Text, FormControl, Input, IconButton, Icon, Box, Container, Flex, useBreakpointValue, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Divider } from '@chakra-ui/react';
 import { NavLink as Link } from 'react-router-dom';
-import NavmenuItem from '../NavmenuItem';
+import NavmenuItem from 'src/components/navigation/NavmenuItem';
 
 const Navbar = () => {
     const isMobile = useBreakpointValue({ base: true, md: false });

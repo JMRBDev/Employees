@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, VStack, Container, Text, Divider } from '@chakra-ui/react';
-import Navbar from '../navigation/Navbar/index';
+import Navbar from 'src/components/navigation/Navbar';
 
 interface ILayoutProps {
     children: React.ReactNode;
