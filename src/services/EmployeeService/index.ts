@@ -1,13 +1,11 @@
+import axios from 'axios';
+import { API_URL } from '../../constants';
 import { INewEmployee } from '../../redux/thunks/employeesThunks';
-const API_URL = 'http://dummy.restapiexample.com/api/v1';
 
 export const getAllEmployees = async () => {
     try {
-        const res = await (await fetch(`${API_URL}/employees`, {
-            method: 'GET',
-        })).json();
-
-        return res;
+        const res = await axios.get(`${API_URL}/employees`);
+        return res.data;
     } catch (err) {
         return {
             status: 'error',
@@ -18,11 +16,8 @@ export const getAllEmployees = async () => {
 
 export const getEmployeeById = async (id: number | string) => {
     try {
-        const res = await (await fetch(`${API_URL}/employee/${id}`, {
-            method: 'GET',
-        })).json();
-
-        return res;
+        const res = await axios.get(`${API_URL}/employee/${id}`);
+        return res.data;
     } catch (err) {
         return {
             status: 'error',
@@ -33,12 +28,8 @@ export const getEmployeeById = async (id: number | string) => {
 
 export const createEmployee = async (data: INewEmployee) => {
     try {
-        const res = await (await fetch(`${API_URL}/create`, {
-            method: 'POST',
-            body: JSON.stringify(data),
-        })).json();
-
-        return res;
+        const res = await axios.post(`${API_URL}/create`, data);
+        return res.data;
     } catch (err) {
         return {
             status: 'error',
@@ -49,16 +40,8 @@ export const createEmployee = async (data: INewEmployee) => {
 
 export const updateEmployee = async ({ id, name, salary, age }: INewEmployee) => {
     try {
-        const res = await (await fetch(`${API_URL}/update/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                name,
-                salary,
-                age,
-            }),
-        })).json();
-
-        return res;
+        const res = await axios.put(`${API_URL}/update/${id}`, { name, salary, age });
+        return res.data;
     } catch (err) {
         return {
             status: 'error',
@@ -69,11 +52,8 @@ export const updateEmployee = async ({ id, name, salary, age }: INewEmployee) =>
 
 export const deleteEmployee = async (id: number) => {
     try {
-        const res = await (await fetch(`${API_URL}/delete/${id}`, {
-            method: 'DELETE',
-        })).json();
-
-        return res;
+        const res = await axios.delete(`${API_URL}/delete/${id}`);
+        return res.data;
     } catch (err) {
         return {
             status: 'error',
