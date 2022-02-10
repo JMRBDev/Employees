@@ -24,9 +24,10 @@ export const getEmployeeById = async (id: number | string) => {
 
         return res;
     } catch (err) {
-        console.log(err);
-
-        return undefined;
+        return {
+            status: 'error',
+            message: (err as Error).message,
+        };
     }
 };
 
@@ -46,7 +47,7 @@ export const createEmployee = async (data: INewEmployee) => {
     }
 };
 
-export const updateEmployee = async (id: number, name?: string, salary?: number, age?: number) => {
+export const updateEmployee = async ({ id, name, salary, age }: INewEmployee) => {
     try {
         const res = await (await fetch(`${API_URL}/update/${id}`, {
             method: 'PUT',
@@ -59,9 +60,10 @@ export const updateEmployee = async (id: number, name?: string, salary?: number,
 
         return res;
     } catch (err) {
-        console.log(err);
-
-        return undefined;
+        return {
+            status: 'error',
+            message: (err as Error).message,
+        };
     }
 };
 
@@ -73,8 +75,9 @@ export const deleteEmployee = async (id: number) => {
 
         return res;
     } catch (err) {
-        console.log(err);
-
-        return undefined;
+        return {
+            status: 'error',
+            message: (err as Error).message,
+        };
     }
 };

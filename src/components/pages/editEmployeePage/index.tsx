@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { createEmployee as createEmployeeThunk, getEmployeeById, INewEmployee } from '../../../redux/thunks/employeesThunks';
+import { deleteEmployee, getEmployeeById, INewEmployee, updateEmployee } from '../../../redux/thunks/employeesThunks';
 import { RootState } from '../../../redux/store';
 import Alert from '../../alerts/Alert';
 import { IoReloadCircle, IoTrash } from 'react-icons/io5';
@@ -45,7 +45,11 @@ const EditEmployeePage = () => {
 
     const { register, handleSubmit, formState: { errors }, watch } = useCreateForm();
     const onSubmit: SubmitHandler<INewEmployee> = () => {
-        dispatch(createEmployeeThunk(watch()));
+        dispatch(updateEmployee({ id: Number(id), ...watch() }))
+    };
+
+    const handleDelete = () => {
+        dispatch(deleteEmployee(Number(id)));
     };
 
     useEffect(() => {
@@ -59,7 +63,7 @@ const EditEmployeePage = () => {
                             icon: IoReloadCircle,
                             onClick: () => {
                                 toast.closeAll();
-                                dispatch(createEmployeeThunk(watch()));
+                                dispatch(updateEmployee({ id: Number(id), ...watch() }));
                             }
                         }}
                     />
@@ -79,7 +83,7 @@ const EditEmployeePage = () => {
                 duration: 5000,
             });
         }
-    }, [appState, dispatch, toast, watch]);
+    }, [appState, dispatch, id, toast, watch]);
 
     useEffect(() => {
         dispatch(getEmployeeById(Number(id)));
@@ -105,7 +109,7 @@ const EditEmployeePage = () => {
                 {
                     isDeleteSecondStep ? (
                         <>
-                            <Button colorScheme="green" onClick={() => console.log('deleting')}>Confirm</Button>
+                            <Button colorScheme="green" onClick={handleDelete}>Confirm</Button>
                             <Button colorScheme="red" variant="outline" onClick={() => setIsDeleteSecondStep(false)}>Cancel</Button>
                         </>
                     ) : (
