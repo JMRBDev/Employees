@@ -16,7 +16,7 @@ export const getAllEmployees = async () => {
     }
 };
 
-export const getSingleEmployee = async (id: number) => {
+export const getEmployeeById = async (id: number | string) => {
     try {
         const res = await (await fetch(`${API_URL}/employee/${id}`, {
             method: 'GET',

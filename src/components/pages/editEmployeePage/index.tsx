@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
-import { FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Button, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Grid, VStack, Text, Spacer, Flex, useToast } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Button, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Grid, VStack, Text, Spacer, Flex, useToast, Skeleton } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
 import EmployeeCard from '../../cards/EmployeeCard';
-import { createEmployee as createEmployeeThunk, INewEmployee } from '../../../redux/thunks/employeesThunks';
+import { createEmployee as createEmployeeThunk, getEmployeeById, INewEmployee } from '../../../redux/thunks/employeesThunks';
 import { RootState } from '../../../redux/store';
 import Alert from '../../alerts/Alert';
 import { IoReloadCircle } from 'react-icons/io5';
+import { useParams } from 'react-router-dom';
 
-const EmployeePage = () => {
+const EditEmployeePage = () => {
+    const { id } = useParams();
+
     const dispatch = useDispatch();
 
     const FormSchema = Yup.object().shape({
@@ -32,8 +35,9 @@ const EmployeePage = () => {
         dispatch(createEmployeeThunk(watch()));
     };
 
-    const { appState } = useSelector((state: RootState) => ({
+    const { appState, currentEmployee } = useSelector((state: RootState) => ({
         appState: state.app.appState,
+        currentEmployee: state.employees.currentEmployee,
     }));
 
     const toast = useToast();
@@ -71,14 +75,24 @@ const EmployeePage = () => {
         }
     }, [appState, dispatch, toast, watch]);
 
+    useEffect(() => {
+        if (id) {
+            dispatch(getEmployeeById(id));
+        }
+    }, [dispatch, id]);
+
     return (
         <Flex direction="column" gap={12} align="stretch">
-            <Heading>New employee</Heading>
+            <Skeleton isLoaded={appState.status === 'ready'}>
+                <Heading>{currentEmployee?.employee_name}</Heading>
+            </Skeleton>
             <Grid gap={8} gridTemplateColumns={{ base: '1fr', sm: '2fr 1fr' }} alignItems="flex-start">
                 <VStack as="form" gap={3} align="stretch" onSubmit={handleSubmit(onSubmit)} w="full">
                     <FormControl isRequired isInvalid={!!errors.name}>
                         <FormLabel htmlFor='name'>Name</FormLabel>
-                        <Input {...register('name')} />
+                        <Skeleton isLoaded={appState.status === 'ready'}>
+                            <Input {...register('name')} value={currentEmployee?.employee_name} />
+                        </Skeleton>
                         {!errors.name ? (
                             <FormHelperText>
                                 Employee name.
@@ -90,12 +104,14 @@ const EmployeePage = () => {
 
                     <FormControl isRequired isInvalid={!!errors.salary}>
                         <FormLabel htmlFor='salary'>Salary</FormLabel>
-                        <NumberInput>
-                            <NumberInputField {...register('salary')} />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
+                        <NumberInput value={currentEmployee?.employeeSalary}>
+                            <Skeleton isLoaded={appState.status === 'ready'}>
+                                <NumberInputField {...register('salary')} />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </Skeleton>
                         </NumberInput>
                         {!errors.salary ? (
                             <FormHelperText>
@@ -108,12 +124,14 @@ const EmployeePage = () => {
 
                     <FormControl isRequired isInvalid={!!errors.age}>
                         <FormLabel htmlFor='age'>Age</FormLabel>
-                        <NumberInput>
-                            <NumberInputField {...register('age')} />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
+                        <NumberInput value={currentEmployee?.employeeSalary}>
+                            <Skeleton isLoaded={appState.status === 'ready'}>
+                                <NumberInputField {...register('age')} />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </Skeleton>
                         </NumberInput>
                         {!errors.age ? (
                             <FormHelperText>
@@ -132,16 +150,18 @@ const EmployeePage = () => {
                 </VStack>
 
                 <VStack align="stretch" justify="space-between" bg="gray.700" overflow="hidden" h="full" p={3} borderRadius={16}>
-                    <EmployeeCard employee={{
-                        employee_name: watch().name || 'Name',
-                        employee_salary: watch().salary || 0,
-                        employee_age: watch().age || 18,
-                    }} />
+                    <Skeleton isLoaded={appState.status === 'ready'}>
+                        <EmployeeCard employee={{
+                            employee_name: watch().name || 'Name',
+                            employee_salary: watch().salary || 0,
+                            employee_age: watch().age || 18,
+                        }} />
+                    </Skeleton>
                     <Text align="center" color="gray.500">Preview card</Text>
                 </VStack>
             </Grid>
-        </Flex>
+        </Flex >
     );
 };
 
-export default EmployeePage;
+export default EditEmployeePage;
