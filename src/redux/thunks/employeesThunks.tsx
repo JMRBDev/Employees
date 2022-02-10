@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { createEmployee as createEmployeeService, getAllEmployees as getAllEmployeesService, getEmployeeById as getEmployeeByIdService, updateEmployee as updateEmployeeService, deleteEmployee as deleteEmployeeService } from '../../services/EmployeeService';
-import { changeAppState } from "../slices/appSlice";
-import { saveEmployees, setCurrentEmployee } from "../slices/employeesSlice";
+import { createEmployee as createEmployeeService, getAllEmployees as getAllEmployeesService, getEmployeeById as getEmployeeByIdService, updateEmployee as updateEmployeeService, deleteEmployee as deleteEmployeeService } from 'src/services/EmployeeService';
+import { changeAppState } from "src/redux/slices/appSlice";
+import { saveEmployees, setCurrentEmployee } from "src/redux/slices/employeesSlice";
 
 export interface INewEmployee {
     id?: number;

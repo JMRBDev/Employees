@@ -4,12 +4,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployee, getEmployeeById, INewEmployee, updateEmployee } from '../../../redux/thunks/employeesThunks';
-import { RootState } from '../../../redux/store';
-import Alert from '../../alerts/Alert';
+import { deleteEmployee, getEmployeeById, INewEmployee, updateEmployee } from 'src/redux/thunks/employeesThunks';
+import { RootState } from 'src/redux/store';
+import Alert from 'src/components/alerts/Alert';
 import { IoReloadCircle, IoTrash } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
-import { setCurrentEmployee } from '../../../redux/slices/employeesSlice';
+import { setCurrentEmployee } from 'src/redux/slices/employeesSlice';
 
 const EditEmployeePage = () => {
     const [isDeleteSecondStep, setIsDeleteSecondStep] = useState(false);

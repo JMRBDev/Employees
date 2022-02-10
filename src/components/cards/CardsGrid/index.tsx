@@ -2,13 +2,13 @@ import React, { useCallback, useEffect } from 'react';
 import { Flex, Grid, GridItem, Heading, HStack, Icon, IconButton, Skeleton, VStack, useToast, Text } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IoReload, IoReloadCircle } from 'react-icons/io5';
-import EmployeeCard from '../EmployeeCard';
-import Pagination from '../../pagination/Pagination';
-import { RootState } from '../../../redux/store';
-import { setCurrentPage } from '../../../redux/slices/userPreferencesSlice';
-import { getAllEmployees } from '../../../redux/thunks/employeesThunks';
-import { IEmployee } from '../../../interfaces/IEmployee';
-import Alert from '../../alerts/Alert';
+import EmployeeCard from 'src/components/cards/EmployeeCard';
+import Pagination from 'src/components/pagination/Pagination';
+import { RootState } from 'src/redux/store';
+import { setCurrentPage } from 'src/redux/slices/userPreferencesSlice';
+import { getAllEmployees } from 'src/redux/thunks/employeesThunks';
+import { IEmployee } from 'src/interfaces/IEmployee';
+import Alert from 'src/components/alerts/Alert';
 
 const CardsGrid = () => {
     const { pageSize, currentPage, employees, appState } = useSelector((state: RootState) => ({

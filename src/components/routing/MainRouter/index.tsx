@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import HomePage from '../../pages/homePage';
-import NewEmployeePage from '../../pages/newEmployeePage';
-import EditEmployeePage from '../../pages/editEmployeePage';
+import HomePage from 'src/components/pages/homePage';
+import NewEmployeePage from 'src/components/pages/newEmployeePage';
+import EditEmployeePage from 'src/components/pages/editEmployeePage';
 
 const MainRouter = () => {
     return (
