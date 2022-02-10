@@ -1,24 +1,24 @@
-import React, { useEffect } from 'react';
-import { Flex, Grid, GridItem, Skeleton, useToast, VStack } from '@chakra-ui/react';
+import React, { useCallback, useEffect } from 'react';
+import { Flex, Grid, GridItem, Heading, HStack, Icon, IconButton, Skeleton, VStack, useToast, Text } from '@chakra-ui/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { IoReload, IoReloadCircle } from 'react-icons/io5';
 import EmployeeCard from '../EmployeeCard';
 import Pagination from '../../pagination/Pagination';
-import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { setCurrentPage } from '../../../redux/slices/userPreferencesSlice';
-import { changeStatus } from '../../../redux/slices/appSlice';
-import { saveEmployees } from '../../../redux/slices/employeesSlice';
-import { getAllEmployees } from '../../../services/EmployeeService';
+import { getAllEmployees } from '../../../redux/thunks/employeesThunks';
 import { IEmployee } from '../../../interfaces/IEmployee';
+import Alert from '../../alerts/Alert';
 
 const CardsGrid = () => {
-    const { pageSize, employees } = useSelector((state: RootState) => ({
+    const { pageSize, currentPage, employees, appState } = useSelector((state: RootState) => ({
         pageSize: state.userPreferences.pageSize as number,
+        currentPage: state.userPreferences.employeesGridCurrentPage as number,
         employees: state.employees.all as IEmployee[],
+        appState: state.app.appState,
     }));
 
-    const currentPage: number = useSelector((state: RootState) => state.userPreferences.employeesGridCurrentPage);
     const dispatch = useDispatch();
-    const toast = useToast();
 
     const getPreparedPages = (pageSize: number) => {
         const preparedPages = [];
@@ -29,45 +29,68 @@ const CardsGrid = () => {
         return preparedPages;
     }
 
+    const toast = useToast();
+
+    const handleReload = useCallback(
+        () => {
+            dispatch(getAllEmployees())
+        },
+        [dispatch],
+    );
+
     useEffect(() => {
-        const _getAllEmployees = async () => {
-            dispatch(changeStatus('fetching'));
-            const res = await getAllEmployees();
-            if (res.status === 'success') {
-                dispatch(changeStatus('ready'));
-                dispatch(saveEmployees(res.data));
-            } else {
-                dispatch(changeStatus('errorFetching'));
-            }
+        if (employees.length === 0) {
+            dispatch(getAllEmployees());
+        }
+    }, [employees.length, dispatch]);
 
+    useEffect(() => {
+        if (appState.status && appState.status === 'errorFetching') {
             toast({
-                title: res.status.toUpperCase(),
-                description: res.message,
-                status: res.status,
-                duration: res.status === 'error' ? null : 5000,
-                isClosable: true,
+                render: () => (
+                    <Alert
+                        type="error"
+                        message={appState.message}
+                        actionButton={{
+                            icon: IoReloadCircle,
+                            onClick: () => {
+                                toast.closeAll();
+                                handleReload();
+                            }
+                        }}
+                    />
+                ),
+                isClosable: false,
+                duration: 5000,
             });
-        };
-
-        _getAllEmployees();
-    }, [dispatch, toast]);
+        }
+    }, [appState, handleReload, dispatch, toast]);
 
     return (
         <VStack align="stretch">
+            <Flex direction={{ base: 'column', md: 'row' }} justify="space-between">
+                <Heading as="h2" size="lg">All employees</Heading>
+                <HStack justify="space-between">
+                    {appState.status === 'errorFetching' && (
+                        <Text color="gray.500" fontSize="xx-small">These results have been pre-cached and may not be updated.</Text>
+                    )}
+                    <IconButton isLoading={appState.status === 'fetching'} aria-label="reload-employees" onClick={handleReload} icon={<Icon as={IoReload} />} />
+                </HStack>
+            </Flex>
             <Grid templateColumns={{ base: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" }} gap="5">
-                {employees.length > 0 ? getPreparedPages(pageSize)?.[currentPage]?.map((cardData) => (
+                {appState.status !== 'fetching' && employees.length > 0 ? getPreparedPages(pageSize)?.[currentPage]?.map((cardData) => (
                     <GridItem key={`employee-card-${cardData.id}`}>
-                        <EmployeeCard employee={cardData} />
+                        <EmployeeCard employee={cardData} isLink />
                     </GridItem>
                 )) : Array.from(Array(pageSize)).map((_, index) => (
-                    <Skeleton isLoaded={employees.length > 0} key={`employee-card-placeholder-${index}`} p={3} borderRadius="md">
+                    <Skeleton isLoaded={appState.status !== 'fetching' && employees.length > 0} key={`employee-card-placeholder-${index}`} p={3} borderRadius="md">
                         <GridItem>
                             <EmployeeCard />
                         </GridItem>
                     </Skeleton>
                 ))}
             </Grid>
-            {employees.length > 0 && (
+            {(appState.status !== 'fetching' && employees.length > 0) && (
                 <Flex w="full" justify="center" pt={12}>
                     <Pagination pages={getPreparedPages(pageSize).length} currentPage={currentPage} setCurrentPage={(index) => dispatch(setCurrentPage(index))} />
                 </Flex>

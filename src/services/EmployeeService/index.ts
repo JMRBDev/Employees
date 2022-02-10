@@ -1,4 +1,4 @@
-import { IEmployee } from '../../interfaces/IEmployee';
+import { INewEmployee } from '../../redux/thunks/employeesThunks';
 const API_URL = 'http://dummy.restapiexample.com/api/v1';
 
 export const getAllEmployees = async () => {
@@ -30,7 +30,7 @@ export const getSingleEmployee = async (id: number) => {
     }
 };
 
-export const createEmployee = async (data: IEmployee) => {
+export const createEmployee = async (data: INewEmployee) => {
     try {
         const res = await (await fetch(`${API_URL}/create`, {
             method: 'POST',

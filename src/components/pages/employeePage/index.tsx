@@ -1,26 +1,26 @@
-import React from 'react';
-import { FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Button, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, useToast, Grid, VStack, Text, Spacer } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import { FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Button, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Grid, VStack, Text, Spacer, Flex, useToast } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { IEmployee } from '../../../interfaces/IEmployee';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch } from 'react-redux';
-import { changeStatus } from '../../../redux/slices/appSlice';
-import { createEmployee } from '../../../services/EmployeeService';
+import { useDispatch, useSelector } from 'react-redux';
 import EmployeeCard from '../../cards/EmployeeCard';
+import { createEmployee as createEmployeeThunk, INewEmployee } from '../../../redux/thunks/employeesThunks';
+import { RootState } from '../../../redux/store';
+import Alert from '../../alerts/Alert';
+import { IoReloadCircle } from 'react-icons/io5';
 
 const EmployeePage = () => {
     const dispatch = useDispatch();
-    const toast = useToast();
 
     const FormSchema = Yup.object().shape({
-        employee_name: Yup.string().required('Name is required'),
-        employee_salary: Yup.number().typeError('Salary must be a number').required('Salary is required'),
-        employee_age: Yup.number().typeError('Age must be a number').required('Age is required'),
+        name: Yup.string().required('Name is required'),
+        salary: Yup.number().typeError('Salary must be a number').required('Salary is required'),
+        age: Yup.number().typeError('Age must be a number').required('Age is required'),
     });
 
     const useCreateForm = () => {
-        return useForm<IEmployee>({
+        return useForm<INewEmployee>({
             mode: 'onChange',
             reValidateMode: 'onChange',
             resolver: yupResolver(FormSchema),
@@ -28,92 +28,119 @@ const EmployeePage = () => {
     }
 
     const { register, handleSubmit, formState: { errors }, watch } = useCreateForm();
-    const onSubmit: SubmitHandler<IEmployee> = (data) => {
-        const _createEmployee = async () => {
-            dispatch(changeStatus('fetching'));
-            const res = await createEmployee(data);
-            if (res.status === 'success') {
-                dispatch(changeStatus('ready'));
-            } else {
-                dispatch(changeStatus('errorFetching'));
-            }
-
-            toast({
-                title: res.status.toUpperCase(),
-                description: res.message,
-                status: res.status,
-                duration: res.status === 'error' ? null : 5000,
-                isClosable: true,
-            });
-        };
-
-        _createEmployee();
+    const onSubmit: SubmitHandler<INewEmployee> = () => {
+        dispatch(createEmployeeThunk(watch()));
     };
 
+    const { appState } = useSelector((state: RootState) => ({
+        appState: state.app.appState,
+    }));
+
+    const toast = useToast();
+
+    useEffect(() => {
+        if (appState.status === 'errorFetching') {
+            toast({
+                render: () => (
+                    <Alert
+                        type="error"
+                        message={appState.message}
+                        actionButton={{
+                            icon: IoReloadCircle,
+                            onClick: () => {
+                                toast.closeAll();
+                                dispatch(createEmployeeThunk(watch()));
+                            }
+                        }}
+                    />
+                ),
+                isClosable: false,
+                duration: 5000,
+            });
+        } else if (appState.status === 'ready') {
+            toast({
+                render: () => (
+                    <Alert
+                        type="success"
+                        message={appState.message}
+                    />
+                ),
+                isClosable: true,
+                duration: 5000,
+            });
+        }
+    }, [appState, dispatch, toast, watch]);
+
     return (
-        <>
+        <Flex direction="column" gap={12} align="stretch">
             <Heading>New employee</Heading>
             <Grid gap={8} gridTemplateColumns={{ base: '1fr', sm: '2fr 1fr' }} alignItems="flex-start">
                 <VStack as="form" gap={3} align="stretch" onSubmit={handleSubmit(onSubmit)} w="full">
-                    <FormControl isRequired isInvalid={!!errors.employee_name}>
-                        <FormLabel htmlFor='employee_name'>Name</FormLabel>
-                        <Input {...register('employee_name')} />
-                        {!errors.employee_name ? (
+                    <FormControl isRequired isInvalid={!!errors.name}>
+                        <FormLabel htmlFor='name'>Name</FormLabel>
+                        <Input {...register('name')} />
+                        {!errors.name ? (
                             <FormHelperText>
                                 Employee name.
                             </FormHelperText>
                         ) : (
-                            <FormErrorMessage>{errors.employee_name?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                         )}
                     </FormControl>
 
-                    <FormControl isRequired isInvalid={!!errors.employee_salary}>
-                        <FormLabel htmlFor='employee_salary'>Salary</FormLabel>
+                    <FormControl isRequired isInvalid={!!errors.salary}>
+                        <FormLabel htmlFor='salary'>Salary</FormLabel>
                         <NumberInput>
-                            <NumberInputField {...register('employee_salary')} />
+                            <NumberInputField {...register('salary')} />
                             <NumberInputStepper>
                                 <NumberIncrementStepper />
                                 <NumberDecrementStepper />
                             </NumberInputStepper>
                         </NumberInput>
-                        {!errors.employee_salary ? (
+                        {!errors.salary ? (
                             <FormHelperText>
                                 Employee salary.
                             </FormHelperText>
                         ) : (
-                            <FormErrorMessage>{errors.employee_salary?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.salary?.message}</FormErrorMessage>
                         )}
                     </FormControl>
 
-                    <FormControl isRequired isInvalid={!!errors.employee_age}>
-                        <FormLabel htmlFor='employee_age'>Age</FormLabel>
-                        <Input type="number" {...register('employee_age')} />
-                        {!errors.employee_age ? (
+                    <FormControl isRequired isInvalid={!!errors.age}>
+                        <FormLabel htmlFor='age'>Age</FormLabel>
+                        <NumberInput>
+                            <NumberInputField {...register('age')} />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        {!errors.age ? (
                             <FormHelperText>
                                 Employee age.
                             </FormHelperText>
                         ) : (
-                            <FormErrorMessage>{errors.employee_age?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.age?.message}</FormErrorMessage>
                         )}
                     </FormControl>
 
                     <Spacer />
 
-                    <Button type="submit" disabled={!!Object.keys(errors).length}>
+                    <Button isLoading={appState.status === 'fetching'} type="submit" disabled={!!Object.keys(errors).length || appState.status === 'fetching'}>
                         Submit
                     </Button>
                 </VStack>
 
                 <VStack align="stretch" justify="space-between" bg="gray.700" overflow="hidden" h="full" p={3} borderRadius={16}>
                     <EmployeeCard employee={{
-                        employee_name: watch().employee_name,
-                        employee_salary: watch().employee_salary,
-                        employee_age: watch().employee_age,
+                        employee_name: watch().name || 'Name',
+                        employee_salary: watch().salary || 0,
+                        employee_age: watch().age || 18,
                     }} />
                     <Text align="center" color="gray.500">Preview card</Text>
                 </VStack>
             </Grid>
-        </>
+        </Flex>
     );
 };
 
