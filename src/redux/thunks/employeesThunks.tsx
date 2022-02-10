@@ -59,8 +59,6 @@ export const getEmployeeById = createAsyncThunk(
         }));
         const res = await getEmployeeByIdService(id);
 
-        console.log(res.data);
-
         if (res.status === 'success') {
             dispatch(changeAppState({ status: 'ready', message: `Employee with ID ${id} fetched successfully` }));
             dispatch(setCurrentEmployee(res.data));
