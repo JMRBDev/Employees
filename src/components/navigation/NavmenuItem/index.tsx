@@ -12,7 +12,7 @@ const NavmenuItem = ({ to, title }: INavmenuItemProps) => {
     const match = useMatch({ path: resolved.pathname, end: true });
 
     return (
-        <Box bg={match ? 'brand.100' : 'none'} color={match ? 'brand.900' : 'none'} px={3} py={0.5} borderRadius={3}>
+        <Box fontWeight={match ? 'bold' : 'normal'} bg={match ? 'brand.100' : 'none'} color={match ? 'brand.900' : 'none'} px={3} py={0.5} borderRadius={3}>
             <Link to={to}>{title}</Link>
         </Box>
     );

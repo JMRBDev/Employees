@@ -15,8 +15,8 @@ const NewEmployeePage = () => {
 
     const FormSchema = Yup.object().shape({
         name: Yup.string().required('Name is required'),
-        salary: Yup.number().typeError('Salary must be a number').required('Salary is required'),
-        age: Yup.number().typeError('Age must be a number').required('Age is required'),
+        salary: Yup.number().required('Salary is required').typeError('Salary must be a number').min(0, 'Salary must be greater than 0'),
+        age: Yup.number().required('Age is required').typeError('Age must be a number').min(0, 'Age must be greater than 0').max(125, 'Age must be less than 125'),
     });
 
     const useCreateForm = () => {
@@ -38,7 +38,7 @@ const NewEmployeePage = () => {
 
     return (
         <Flex direction="column" gap={12} align="stretch">
-            <Heading>New employee</Heading>
+            <Heading as="h1" size="lg">New employee</Heading>
             <Grid gap={8} gridTemplateColumns={{ base: '1fr', sm: '2fr 1fr' }} alignItems="flex-start">
                 <VStack as="form" gap={3} align="stretch" onSubmit={handleSubmit(onSubmit)} w="full">
                     <FormControl isRequired isInvalid={!!errors.name}>
@@ -55,7 +55,7 @@ const NewEmployeePage = () => {
 
                     <FormControl isRequired isInvalid={!!errors.salary}>
                         <FormLabel htmlFor='salary'>Salary</FormLabel>
-                        <NumberInput>
+                        <NumberInput min={0}>
                             <NumberInputField {...register('salary')} />
                             <NumberInputStepper>
                                 <NumberIncrementStepper />
@@ -73,7 +73,7 @@ const NewEmployeePage = () => {
 
                     <FormControl isRequired isInvalid={!!errors.age}>
                         <FormLabel htmlFor='age'>Age</FormLabel>
-                        <NumberInput>
+                        <NumberInput min={0} max={125}>
                             <NumberInputField {...register('age')} />
                             <NumberInputStepper>
                                 <NumberIncrementStepper />
