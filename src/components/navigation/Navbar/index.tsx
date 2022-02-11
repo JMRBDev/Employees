@@ -1,8 +1,9 @@
 import React from 'react';
-import { HStack, FormControl, Input, IconButton, Icon, Box, Container, Flex, useBreakpointValue, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Divider } from '@chakra-ui/react';
+import { HStack, IconButton, Icon, Box, Container, Flex, useBreakpointValue, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Divider } from '@chakra-ui/react';
 import { NavLink as Link } from 'react-router-dom';
 import NavmenuItem from 'src/components/navigation/NavmenuItem';
 import Logo from 'src/components/logo';
+import SearchBar from 'src/components/searchBar';
 
 const Navbar = () => {
     const isMobile = useBreakpointValue({ base: true, md: false });
@@ -47,12 +48,9 @@ const Navbar = () => {
                 </HStack>
 
                 <Flex align="right">
-                    <Flex gap={2} display="inline-flex" >
+                    <Flex gap={2} display="inline-flex">
                         {!isMobile && (
-                            <FormControl as={HStack} w="auto">
-                                <Input placeholder="Search employee" />
-                                <IconButton aria-label="Search employee" icon={<Icon />} onClick={() => { }} />
-                            </FormControl>
+                            <SearchBar />
                         )}
 
                         {isMobile && (
@@ -69,10 +67,7 @@ const Navbar = () => {
                                         ))}
                                         <Divider />
                                         <Box p={2}>
-                                            <FormControl as={HStack} w="auto">
-                                                <Input placeholder="Search employee" />
-                                                <IconButton aria-label="Search employee" icon={<Icon />} onClick={() => { }} />
-                                            </FormControl>
+                                            <SearchBar />
                                         </Box>
                                     </MenuList>
                                 </Menu>
