@@ -35,17 +35,12 @@ const EditEmployeePage = () => {
             mode: 'onChange',
             reValidateMode: 'onChange',
             resolver: yupResolver(FormSchema),
-            defaultValues: {
-                name: currentEmployee?.employee_name,
-                salary: currentEmployee?.employee_salary,
-                age: currentEmployee?.employee_age,
-            }
         });
     }
 
-    const { register, handleSubmit, formState: { errors }, watch } = useCreateForm();
-    const onSubmit: SubmitHandler<INewEmployee> = () => {
-        dispatch(updateEmployee({ id: Number(id), ...watch() }))
+    const { register, handleSubmit, formState: { errors } } = useCreateForm();
+    const onSubmit: SubmitHandler<INewEmployee> = (data) => {
+        dispatch(updateEmployee({ id: Number(id), ...data }))
     };
 
     const navigate = useNavigate();
@@ -61,8 +56,7 @@ const EditEmployeePage = () => {
         return () => {
             dispatch(setCurrentEmployee(undefined));
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch, id]);
 
     return (
         <VStack align="stretch">
@@ -87,7 +81,7 @@ const EditEmployeePage = () => {
             <VStack as="form" gap={3} align="stretch" onSubmit={handleSubmit(onSubmit)} w="full">
                 <FormControl isRequired isInvalid={!!errors.name}>
                     <FormLabel htmlFor='name'>Name</FormLabel>
-                    {appState.status === APP_STATUS.READY ? (
+                    {(appState.status === APP_STATUS.READY && currentEmployee?.employee_name) ? (
                         <Input {...register('name')} defaultValue={currentEmployee?.employee_name} />
                     ) : (
                         <Skeleton>
