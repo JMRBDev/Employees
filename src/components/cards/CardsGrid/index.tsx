@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect } from 'react';
-import { Flex, Grid, GridItem, Heading, HStack, Icon, IconButton, Skeleton, VStack, useToast, Text } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import { Flex, Grid, GridItem, Skeleton, VStack } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IoReload } from 'react-icons/io5';
 import EmployeeCard from 'src/components/cards/EmployeeCard';
 import Pagination from 'src/components/pagination/Pagination';
 import { RootState } from 'src/redux/store';
@@ -29,16 +28,6 @@ const CardsGrid = () => {
         return preparedPages;
     }
 
-    const toast = useToast();
-
-    const handleReload = useCallback(
-        () => {
-            toast.closeAll();
-            dispatch(getAllEmployees())
-        },
-        [dispatch, toast],
-    );
-
     useEffect(() => {
         if (employees.length === 0) {
             dispatch(getAllEmployees());
@@ -46,16 +35,7 @@ const CardsGrid = () => {
     }, [employees.length, dispatch]);
 
     return (
-        <VStack align="stretch">
-            <Flex direction={{ base: 'column', md: 'row' }} justify="space-between">
-                <Heading as="h2" size="lg">All employees</Heading>
-                <HStack justify="space-between">
-                    {appState.status === APP_STATUS.ERROR_FETCHING && (
-                        <Text color="gray.500" fontSize="xx-small">These results have been pre-cached and may not be updated.</Text>
-                    )}
-                    <IconButton isLoading={appState.status === APP_STATUS.FETCHING} aria-label="reload-employees" onClick={handleReload} icon={<Icon as={IoReload} />} />
-                </HStack>
-            </Flex>
+        <VStack align="stretch" gap={8}>
             <Grid templateColumns={{ base: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" }} gap="5">
                 {appState.status !== APP_STATUS.FETCHING && employees.length > 0 ? getPreparedPages(pageSize)?.[currentPage]?.map((cardData) => (
                     <GridItem key={`employee-card-${cardData.id}`}>
@@ -70,7 +50,7 @@ const CardsGrid = () => {
                 ))}
             </Grid>
             {(appState.status !== APP_STATUS.FETCHING && employees.length > 0) && (
-                <Flex w="full" justify="center" pt={12}>
+                <Flex w="full" justify="center">
                     <Pagination pages={getPreparedPages(pageSize).length} currentPage={currentPage} setCurrentPage={(index) => dispatch(setCurrentPage(index))} />
                 </Flex>
             )}
