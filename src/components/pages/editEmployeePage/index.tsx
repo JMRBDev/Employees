@@ -75,7 +75,7 @@ const EditEmployeePage = () => {
                             )
                         }
                     </Skeleton>
-                    <IconButton isLoading={appState.status === APP_STATUS.FETCHING} aria-label="reload-employees" onClick={() => dispatch(getEmployeeById(Number(id)))} icon={<Icon as={IoReload} />} />
+                    <IconButton isLoading={appState.status === APP_STATUS.FETCHING} aria-label="reload" onClick={() => dispatch(getEmployeeById(Number(id)))} icon={<Icon as={IoReload} />} />
                 </HStack>
             </Flex>
             <VStack as="form" gap={3} align="stretch" onSubmit={handleSubmit(onSubmit)} w="full">
