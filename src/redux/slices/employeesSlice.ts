@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IEmployee } from 'src/interfaces/IEmployee';
+import { IEmployee } from 'src/interfaces';
 
 export interface EmployeesState {
     all: IEmployee[];

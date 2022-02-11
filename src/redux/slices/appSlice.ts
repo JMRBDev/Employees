@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import APP_STATUS from 'src/enums/APP_STATUS';
 
 export interface AppState {
     appState: {
-        status?: 'idle' | 'ready' | 'fetching' | 'errorFetching';
+        status?: APP_STATUS;
         message?: string;
     }
 };
 
 const initialState: AppState = {
     appState: {
-        status: 'idle',
+        status: APP_STATUS.IDLE,
     },
 };
 
