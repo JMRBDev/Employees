@@ -1,7 +1,8 @@
 import React from 'react';
-import { HStack, Text, FormControl, Input, IconButton, Icon, Box, Container, Flex, useBreakpointValue, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Divider } from '@chakra-ui/react';
+import { HStack, FormControl, Input, IconButton, Icon, Box, Container, Flex, useBreakpointValue, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, Divider } from '@chakra-ui/react';
 import { NavLink as Link } from 'react-router-dom';
 import NavmenuItem from 'src/components/navigation/NavmenuItem';
+import Logo from 'src/components/logo';
 
 const Navbar = () => {
     const isMobile = useBreakpointValue({ base: true, md: false });
@@ -36,7 +37,7 @@ const Navbar = () => {
                 gap={8}
             >
                 <Flex align="center" color="black.300">
-                    <Text fontWeight="bold">Logo</Text>
+                    <Logo />
                 </Flex>
 
                 <HStack display={{ base: 'none', md: 'flex' }} flexGrow={1} color="black.300">

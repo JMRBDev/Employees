@@ -19,6 +19,7 @@ const persistConfig: PersistConfig<any> = {
     key: 'root',
     version: 1,
     storage,
+    blacklist: ['app', 'userPreferences'],
 };
 
 const rootReducer = combineReducers({

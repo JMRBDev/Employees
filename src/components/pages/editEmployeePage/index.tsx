@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Button, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, VStack, Spacer, Flex, useToast, IconButton, HStack, Icon, Spinner } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Button, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, VStack, Spacer, Flex, IconButton, HStack, Icon, Spinner } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployee, getEmployeeById, INewEmployee, updateEmployee } from 'src/redux/thunks/employeesThunks';
+import { deleteEmployee, getEmployeeById, updateEmployee } from 'src/redux/thunks/employeesThunks';
 import { RootState } from 'src/redux/store';
-import Alert from 'src/components/alerts/Alert';
-import { IoReloadCircle, IoTrash } from 'react-icons/io5';
+import { IoTrash } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setCurrentEmployee } from 'src/redux/slices/employeesSlice';
+import { INewEmployee } from 'src/interfaces';
+import APP_STATUS from 'src/enums/APP_STATUS';
 
 const EditEmployeePage = () => {
     const [isDeleteSecondStep, setIsDeleteSecondStep] = useState(false);
@@ -17,7 +18,6 @@ const EditEmployeePage = () => {
     const { id } = useParams();
 
     const dispatch = useDispatch();
-    const toast = useToast();
 
     const { appState, currentEmployee } = useSelector((state: RootState) => ({
         appState: state.app.appState,
@@ -54,39 +54,6 @@ const EditEmployeePage = () => {
         dispatch(deleteEmployee(Number(id)));
         navigate('/')
     };
-
-    useEffect(() => {
-        if (appState.status === 'errorFetching') {
-            toast({
-                render: () => (
-                    <Alert
-                        type="error"
-                        message={appState.message}
-                        actionButton={{
-                            icon: IoReloadCircle,
-                            onClick: () => {
-                                toast.closeAll();
-                                dispatch(updateEmployee({ id: Number(id), ...watch() }));
-                            }
-                        }}
-                    />
-                ),
-                isClosable: false,
-                duration: 5000,
-            });
-        } else if (appState.status === 'ready') {
-            toast({
-                render: () => (
-                    <Alert
-                        type="success"
-                        message={appState.message}
-                    />
-                ),
-                isClosable: true,
-                duration: 5000,
-            });
-        }
-    }, [appState, dispatch, id, toast, watch]);
 
     useEffect(() => {
         dispatch(getEmployeeById(Number(id)));
@@ -171,7 +138,7 @@ const EditEmployeePage = () => {
 
                 <Spacer />
 
-                <Button isLoading={appState.status === 'fetching'} type="submit" disabled={!!Object.keys(errors).length || appState.status === 'fetching'}>
+                <Button isLoading={appState.status === APP_STATUS.FETCHING} type="submit" disabled={!!Object.keys(errors).length || appState.status === APP_STATUS.FETCHING}>
                     Submit
                 </Button>
             </VStack>
