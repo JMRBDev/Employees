@@ -26,7 +26,7 @@ const HomePage = () => {
                     {appState.status === APP_STATUS.ERROR_FETCHING && (
                         <Text color="gray.500" fontSize="xs">These results have been pre-cached and may not be updated.</Text>
                     )}
-                    <IconButton isLoading={appState.status === APP_STATUS.FETCHING} aria-label="reload-employees" onClick={() => dispatch(getAllEmployees())} icon={<Icon as={IoReload} />} />
+                    <IconButton isLoading={appState.status === APP_STATUS.FETCHING} aria-label="reload" onClick={() => dispatch(getAllEmployees())} icon={<Icon as={IoReload} />} />
                 </HStack>
             </Flex>
 
