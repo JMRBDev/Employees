@@ -3,7 +3,7 @@ import { INewEmployee } from 'src/interfaces';
 
 export const getAllEmployees = async () => {
     try {
-        const res = await axios.get(`/employees`);
+        const res = await axios.get(`https://dummy.restapiexample.com/api/v1/employees`);
         return res.data;
     } catch (err) {
         return {
@@ -15,7 +15,7 @@ export const getAllEmployees = async () => {
 
 export const getEmployeeById = async (id: number | string) => {
     try {
-        const res = await axios.get(`/employee/${id}`);
+        const res = await axios.get(`https://dummy.restapiexample.com/api/v1/employee/${id}`);
         return res.data;
     } catch (err) {
         return {

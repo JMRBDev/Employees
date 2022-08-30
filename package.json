@@ -12,7 +12,6 @@
     "type": "git",
     "url": "https://github.com/JMRBDev/Employees"
   },
-  "proxy": "https://dummy.restapiexample.com/api/v1",
   "dependencies": {
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11",
